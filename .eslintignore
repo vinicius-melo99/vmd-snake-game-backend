@@ -1,0 +1,2 @@
+src/database/config/config.js
+src/database/migrations/*.js
