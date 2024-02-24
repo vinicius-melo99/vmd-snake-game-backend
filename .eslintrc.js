@@ -23,5 +23,7 @@ module.exports = {
   },
   rules: {
     'no-param-reassign': 0,
+    'no-console': 0,
+    'import/prefer-default-export': 0,
   },
 };
