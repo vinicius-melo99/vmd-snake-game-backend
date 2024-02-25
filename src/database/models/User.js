@@ -2,12 +2,15 @@ import { Model, DataTypes } from 'sequelize';
 import bcrypt from 'bcryptjs';
 import sequelize from './sequelize';
 
-export default class User extends Model {}
+class User extends Model {}
 
 User.init({
   username: {
     type: DataTypes.STRING,
     defaultValue: '',
+    unique: {
+      msg: 'Este usuário já está cadastrado',
+    },
     validate: {
       len: {
         args: [4, 20],
@@ -45,9 +48,13 @@ User.init({
 }, {
   sequelize,
   timestamps: false,
+  underscored: true,
+  tableName: 'users',
 });
 
 User.addHook('beforeSave', (user) => {
   const salt = bcrypt.genSaltSync(5);
   user.password = bcrypt.hashSync(user.passwordText, salt);
 });
+
+export default User;
