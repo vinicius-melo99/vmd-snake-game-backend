@@ -1,11 +1,40 @@
 // import { get } from 'lodash';
 import { get } from 'lodash';
+import bcrypt from 'bcryptjs';
 import serviceResponse from './serviceResponse';
 import HttpStatus from '../utils/HttpStatus';
 import User from '../database/models/User';
 import Ranking from '../database/models/Ranking';
+import jwtManager from '../security/JWTManager';
 
 class UserServices {
+  async auth(authData) {
+    try {
+      const { username = 0, email = 0, passwordText } = authData;
+
+      const user = await User.findOne({ where: username ? { username } : { email } });
+
+      if (!user || !bcrypt.compareSync(passwordText, user.dataValues.password)) {
+        const errorMessage = ['Usuário não encontrado. Tente novamente.'];
+        return serviceResponse(true, HttpStatus.NOT_FOUND, errorMessage);
+      }
+
+      const payload = {
+        id: user.dataValues.id,
+        username: user.dataValues.username,
+        password: user.dataValues.password,
+      };
+
+      const token = jwtManager.generateToken(payload);
+
+      return serviceResponse(false, HttpStatus.OK, { token });
+    } catch {
+      const errorMessage = ['Erro interno no servidor.'];
+
+      return serviceResponse(true, HttpStatus.INTERNAL_SERVER_ERROR, errorMessage);
+    }
+  }
+
   async index() {
     try {
       const users = await User.findAll({

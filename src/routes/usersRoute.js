@@ -7,5 +7,6 @@ const usersRoute = Router();
 usersRoute.get('/', userControllers.index);
 
 usersRoute.post('/', Middlewares.userConstraints, userControllers.create);
+usersRoute.post('/auth', userControllers.auth);
 
 export default usersRoute;
