@@ -22,6 +22,7 @@ class UserServices {
       const payload = {
         id: user.dataValues.id,
         username: user.dataValues.username,
+        email: user.dataValues.email,
         password: user.dataValues.password,
       };
 
@@ -53,6 +54,26 @@ class UserServices {
       const error = ['Erro interno no servidor.'];
 
       return serviceResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
+  }
+
+  async find(id) {
+    try {
+      const user = await User.findByPk(id, {
+        attributes: {
+          exclude: ['password'],
+        },
+      });
+
+      if (!user) {
+        const error = ['Usuário não encontrado'];
+        return serviceResponse(true, HttpStatus.NOT_FOUND, error);
+      }
+
+      return serviceResponse(false, HttpStatus.OK, user);
+    } catch {
+      const error = ['Erro interno de servidor'];
+      return serviceResponse(true, HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 

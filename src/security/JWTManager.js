@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { resolve } from 'path';
 import dotenv from 'dotenv';
 
@@ -13,6 +13,10 @@ class JWTManager {
     return sign(payload, this.secret, {
       expiresIn: this.expiresIn,
     });
+  }
+
+  verifyToken(token) {
+    return verify(token, this.secret);
   }
 }
 
