@@ -1,1 +1,1 @@
-# vmd-snake-game-backend
+# Snake Game API
