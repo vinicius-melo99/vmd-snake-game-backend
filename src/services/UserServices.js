@@ -23,7 +23,6 @@ class UserServices {
         id: user.dataValues.id,
         username: user.dataValues.username,
         email: user.dataValues.email,
-        password: user.dataValues.password,
       };
 
       const token = jwtManager.generateToken(payload);
@@ -93,6 +92,53 @@ class UserServices {
       const error = ['Erro interno no servidor.'];
 
       return serviceResponse(true, HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
+  }
+
+  async delete(id) {
+    try {
+      const response = await User.destroy({ where: { id } });
+
+      if (!response) {
+        const error = ['Usuário não encontrado.'];
+        return serviceResponse(false, HttpStatus.NOT_FOUND, error);
+      }
+
+      const message = 'Usuário deletado com sucesso.';
+
+      return serviceResponse(false, HttpStatus.OK, { response: message });
+    } catch {
+      const error = ['Erro interno no servidor.'];
+      return serviceResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
+  }
+
+  async update(newData, id) {
+    const { passwordText } = newData;
+    try {
+      const response = await User.update(newData, {
+        where: { id },
+        individualHooks: !!passwordText,
+      });
+
+      if (!response) {
+        const error = ['Usuário não encontrado.'];
+        return serviceResponse(false, HttpStatus.NOT_FOUND, error);
+      }
+
+      const { data } = await this.find(id);
+
+      return serviceResponse(false, HttpStatus.OK, data);
+    } catch (e) {
+      const errors = get(e, 'errors', false);
+
+      if (errors) {
+        const errorMessages = errors.map((error) => error.message);
+        return serviceResponse(true, HttpStatus.BAD_REQUEST, errorMessages);
+      }
+
+      // const error = ['Erro interno no servidor.'];
+      return serviceResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
   }
 }
