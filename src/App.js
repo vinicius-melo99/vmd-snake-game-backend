@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { checkRouter } from './routes';
+import * as routes from './routes';
 
 class App {
   constructor() {
@@ -16,7 +16,8 @@ class App {
   }
 
   routesConfig() {
-    this.app.use('/online', checkRouter);
+    this.app.use('/online', routes.checkRouter);
+    this.app.use('/users', routes.usersRoute);
   }
 }
 

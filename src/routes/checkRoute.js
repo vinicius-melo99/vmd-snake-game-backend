@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import Middlewares from '../middlewares/Middlewares';
 
 const checkRouter = Router();
 
-checkRouter.get('/', async (req, res) => res.status(200).json({ status: 'online' }));
+checkRouter.get('/', Middlewares.tokenValidation, (req, res) => res.status(200).json({ status: 'Online' }));
 
 export default checkRouter;

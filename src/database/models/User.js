@@ -57,4 +57,9 @@ User.addHook('beforeSave', (user) => {
   user.password = bcrypt.hashSync(user.passwordText, salt);
 });
 
+User.addHook('beforeUpdate', (user) => {
+  const salt = bcrypt.genSaltSync(5);
+  user.password = bcrypt.hashSync(user.passwordText, salt);
+});
+
 export default User;
