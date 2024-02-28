@@ -5,11 +5,21 @@ import User from './User';
 class Ranking extends Model {}
 
 Ranking.init({
-  score: DataTypes.INTEGER,
+  score: {
+    type: DataTypes.INTEGER,
+    validate: {
+      isInt: {
+        msg: 'O valor deve ser um número inteiro.',
+      },
+    },
+  },
 
   userId: {
     type: DataTypes.INTEGER,
     field: 'user_id',
+    unique: {
+      msg: 'Este usuário já está registrado no ranking.',
+    },
   },
 }, {
   sequelize,

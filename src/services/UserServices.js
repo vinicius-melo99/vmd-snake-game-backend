@@ -41,6 +41,9 @@ class UserServices {
         include: {
           model: Ranking,
           as: 'ranking',
+          attributes: {
+            exclude: ['id', 'userId'],
+          },
         },
 
         attributes: {
@@ -137,8 +140,8 @@ class UserServices {
         return serviceResponse(true, HttpStatus.BAD_REQUEST, errorMessages);
       }
 
-      // const error = ['Erro interno no servidor.'];
-      return serviceResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, e);
+      const error = ['Erro interno no servidor.'];
+      return serviceResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 }
