@@ -41,6 +41,9 @@ class UserServices {
         include: {
           model: Ranking,
           as: 'ranking',
+          attributes: {
+            exclude: ['id', 'userId'],
+          },
         },
 
         attributes: {
