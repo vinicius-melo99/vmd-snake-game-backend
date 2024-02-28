@@ -18,6 +18,7 @@ class App {
   routesConfig() {
     this.app.use('/online', routes.checkRouter);
     this.app.use('/users', routes.usersRoute);
+    this.app.use('/ranking', routes.rankingRoute);
   }
 }
 

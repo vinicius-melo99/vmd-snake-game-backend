@@ -22,14 +22,11 @@ export default class Middlewares {
     }
 
     try {
-      const decodedData = jwtManager.verifyToken(token);
-      const {
-        id, username, email,
-      } = decodedData;
+      const { id, username, email } = jwtManager.verifyToken(token);
 
       const { data } = await userServices.find(id);
 
-      if (data.username !== username || data.email !== email) {
+      if (!data || data.username !== username || data.email !== email) {
         throw new Error(HttpStatus.UNAUTHORIZED);
       }
 
